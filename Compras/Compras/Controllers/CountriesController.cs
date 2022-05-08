@@ -69,7 +69,7 @@ namespace Compras.Controllers
                 return NotFound();
             }
 
-            var country = await _context.countries.FindAsync(id);
+            Country country = await _context.countries.FindAsync(id);
             if (country == null)
             {
                 return NotFound();
@@ -82,7 +82,7 @@ namespace Compras.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name")] Country country)
+        public async Task<IActionResult> Edit(int id, Country country)
         {
             if (id != country.ID)
             {
