@@ -1,6 +1,7 @@
 ﻿#nullable disable
 using Compras.Datos;
 using Compras.Datos.Entities;
+using Compras.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ namespace Compras.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            return View(await _context.countries.ToListAsync());
         }
 
         // GET: Countries/Details/5
@@ -31,7 +32,7 @@ namespace Compras.Controllers
                 return NotFound();
             }
 
-            var country = await _context.Categories
+            var country = await _context.countries
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (country == null)
             {
@@ -77,6 +78,67 @@ namespace Compras.Controllers
                 }
             }
             return View(country);
+
+        }
+
+        public async Task<IActionResult> AddState(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Country country = await _context.countries.FindAsync(id);
+
+            if (country == null)
+            {
+                return NotFound();
+            }
+
+            StateViewModel model = new()
+            {
+                CountryID = country.ID,
+            };
+
+            return View(model);
+        }
+
+        // POS: Countries/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddState(StateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    State state = new()
+                    {
+                        Cities = new List<City>(),
+                        Country = await _context.countries.FindAsync(model.CountryID),
+                        Name = model.Name,
+                    };
+                    _context.Add(state);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Details), new {Id = model.CountryID });
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Ya existe un Estado con el mismo nombre en este pais.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
+            }
+            return View(model);
 
         }
 
