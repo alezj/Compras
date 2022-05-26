@@ -20,7 +20,7 @@ namespace Compras.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.countries.Include(c => c.States) .ToListAsync());
+            return View(await _context.countries.Include(c => c.States).ToListAsync());
         }
 
         // GET: Countries/Details/5
@@ -33,7 +33,7 @@ namespace Compras.Controllers
             }
 
             var country = await _context.countries
-                .Include (c => c.States)
+                .Include(c => c.States)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (country == null)
             {
@@ -41,6 +41,26 @@ namespace Compras.Controllers
             }
 
             return View(country);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DetailsState(int? id)
+        {
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            State state = await _context.States
+                .Include(s => s.Cities)
+                .FirstOrDefaultAsync(m => m.ID == id);
+            if (state == null)
+            {
+                return NotFound();
+            }
+
+            return View(state);
         }
 
         // GET: Countries/Create
@@ -122,7 +142,7 @@ namespace Compras.Controllers
                     };
                     _context.Add(state);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Details), new {Id = model.CountryID });
+                    return RedirectToAction(nameof(Details), new { Id = model.CountryID });
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
@@ -160,7 +180,7 @@ namespace Compras.Controllers
             return View(country);
         }
 
-       
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Country country)
@@ -205,7 +225,7 @@ namespace Compras.Controllers
             }
 
             State state = await _context.States
-                .Include (s=> s.Country)
+                .Include(s => s.Country)
                 .FirstOrDefaultAsync(s => s.ID == id);
             if (state == null)
             {
@@ -237,11 +257,11 @@ namespace Compras.Controllers
                     State state = new()
                     {
                         ID = model.ID,
-                        Name= model.Name,
+                        Name = model.Name,
                     };
                     _context.Update(state);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Details), new {Id = model.CountryID});
+                    return RedirectToAction(nameof(Details), new { Id = model.CountryID });
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
@@ -273,7 +293,7 @@ namespace Compras.Controllers
 
             Country country = await _context.countries
                 .Include(c => c.States)
-                .FirstOrDefaultAsync(c => c.ID ==id);
+                .FirstOrDefaultAsync(c => c.ID == id);
             if (country == null)
             {
                 return NotFound();
@@ -293,6 +313,6 @@ namespace Compras.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        
+
     }
 }
