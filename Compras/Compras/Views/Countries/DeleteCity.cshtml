@@ -1,0 +1,18 @@
+﻿@model Compras.Datos.Entities.City
+
+@{
+    ViewData["Title"] = "DeleteCity";
+}
+
+<h1>Delete</h1>
+
+<h3>Esta seguro de que queres borrar este Ciudad?</h3>
+<div>
+    <partial name= "_CityDetails"/>
+    
+    <form asp-action="DeleteCity">
+        <input type="hidden" asp-for="ID" />
+        <input type="submit" value="Borrar" class="btn btn-outline-danger" /> 
+       <a asp-action="DetailsState" asp-route-id="@Model?.State.ID" class="btn btn-outline-success" >Regresar</a>
+    </form>
+</div>
