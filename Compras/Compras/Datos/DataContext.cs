@@ -1,9 +1,10 @@
 ﻿using Compras.Datos.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Compras.Datos
 {
-    public class DataContext  : DbContext
+    public class DataContext  : IdentityDbContext<User>
     {
         public DataContext(DbContextOptions<DataContext> options): base(options)
         {
@@ -15,7 +16,7 @@ namespace Compras.Datos
         public DbSet<City> Cities { get; set; }
 
         public DbSet <Country> countries { get; set; }
-
+        public object Countries { get; internal set; }
         public DbSet<State> States { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
