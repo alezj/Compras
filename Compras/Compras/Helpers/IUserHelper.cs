@@ -1,4 +1,5 @@
 ﻿using Compras.Datos.Entities;
+using Compras.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Compras.Helpers
@@ -14,6 +15,11 @@ namespace Compras.Helpers
         Task AddUserToRoleAsync(User user, string roleName);
 
         Task<bool> IsUserInRoleAsync(User user, string roleName);
+
+        Task<SignInResult> LoginAsync(LoginViewModel model);
+
+        Task LogoutAsync();
+
 
     }
 }
