@@ -41,6 +41,8 @@ void SeedData()
         service.SeedAsync().Wait();
     }
 
+    
+
 }
 
 if (!app.Environment.IsDevelopment())
