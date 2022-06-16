@@ -15,10 +15,10 @@ namespace Compras.Helpers
 
         public UserHelper(DataContext context, UserManager<User> userManager, RoleManager<IdentityRole>  roleManager ,SignInManager<User> signInManager)
         {
-            this._context = context;
-            this._userManager = userManager;
-            this._roleManager = roleManager;
-            this._signInManager = signInManager;
+           _context = context;
+           _userManager = userManager;
+           _roleManager = roleManager;
+           _signInManager = signInManager;
         }
 
         public async Task<IdentityResult> AddUserAsync(User user, string password)

@@ -47,7 +47,13 @@ namespace Compras.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-       
+        public IActionResult NotAuthorized()
+        {
+            return View();
+        }
+
+
+
 
     }
 }
