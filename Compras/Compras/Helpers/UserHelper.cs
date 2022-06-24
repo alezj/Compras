@@ -20,7 +20,15 @@ namespace Compras.Helpers
            _roleManager = roleManager;
            _signInManager = signInManager;
         }
+        public async Task<SignInResult> LoginAsync(LoginViewModel model)
+        {
+            return await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+        }
 
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
+        }
         public async Task<IdentityResult> AddUserAsync(User user, string password)
         {
             return await _userManager.CreateAsync(user, password);
@@ -57,14 +65,6 @@ namespace Compras.Helpers
             return await _userManager.IsInRoleAsync(user, roleName);
         }
 
-        public async Task<SignInResult> LoginAsync(LoginViewModel model)
-         {
-            return await _signInManager.PasswordSignInAsync(model.Username,model.Password,model.RememberMe, false);
-        }
-
-        public async Task LogoutAsync()
-        {
-            await _signInManager.SignOutAsync();
-        }
+     
     }
 }
