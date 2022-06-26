@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Compras.Datos.Entities
 {
@@ -11,6 +12,7 @@ namespace Compras.Datos.Entities
         [Required(ErrorMessage = "El compo {0} es Obligatorio. ")]
         public string Name { get; set; }
 
+        [JsonIgnore]
         public State State { get; set; }
 
         public ICollection<User> Users { get; set; }

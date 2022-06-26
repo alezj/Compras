@@ -1,7 +1,11 @@
 ﻿using Compras.Enums;
 using Compras.Helpers;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Compras.Datos.Entities;
+
 
 public class SeedDb
 {

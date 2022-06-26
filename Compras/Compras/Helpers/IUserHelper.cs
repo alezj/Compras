@@ -1,6 +1,7 @@
 ﻿using Compras.Datos.Entities;
 using Compras.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace Compras.Helpers
 {
@@ -9,6 +10,8 @@ namespace Compras.Helpers
         Task<User> GetUserAsync(string email);
 
         Task<IdentityResult> AddUserAsync(User user, string password);
+
+        Task<User> AddUserAsync(AddUserViewModel model);
 
         Task CheckRoleAsync(string roleName);
 
