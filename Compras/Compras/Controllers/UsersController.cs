@@ -72,7 +72,7 @@ namespace Compras.Controllers
                 }
 
               
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Users");
                 
             }
             model.Countries = await _combosHelper.GetComboCountriesAsync();

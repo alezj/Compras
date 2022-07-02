@@ -3,6 +3,7 @@ using Compras.Datos.Entities;
 using Compras.Enums;
 using Compras.Helpers;
 using Compras.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -64,7 +65,7 @@ namespace Compras.Controllers
             return View();
         }
 
-
+       
         public async Task<IActionResult> Register()
         {
             AddUserViewModel model = new ()
@@ -202,6 +203,46 @@ namespace Compras.Controllers
 
                 await _userHelper.UpdateUserAsync(user);
                 return RedirectToAction("Index", "Home");
+            }
+
+            model.Countries = await _combosHelper.GetComboCountriesAsync();
+            model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
+            model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
+            return View(model);
+        }
+
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.OldPassword == model.NewPassword)
+                {
+                    ModelState.AddModelError(string.Empty,"Debe ingresar una contraseña diferente.");
+                    return View(model);  
+                }
+                var user = await _userHelper.GetUserAsync(User.Identity.Name);
+                if (user != null)
+                {
+                    IdentityResult? result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("ChangeUser");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Usuario no encontrado.");
+                }
             }
 
             return View(model);
