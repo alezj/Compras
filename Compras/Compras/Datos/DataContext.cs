@@ -19,7 +19,6 @@ namespace Compras.Datos
         public object Countries { get; internal set; }
         public DbSet<State> States { get; set; }
         public DbSet<Product> Products { get; set; }
-
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
 
@@ -32,7 +31,7 @@ namespace Compras.Datos
             modelBuilder.Entity<Category>().HasIndex(c => c.Name).IsUnique();
             modelBuilder.Entity<State>().HasIndex("Name","CountryID").IsUnique();
             modelBuilder.Entity<Product>().HasIndex(c => c.Name).IsUnique();
-            modelBuilder.Entity<ProductCategory>().HasIndex("ProductId", "CategoryId").IsUnique();
+            modelBuilder.Entity<ProductCategory>().HasIndex("ProductId", "CategoryID").IsUnique();
 
         }
 

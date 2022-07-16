@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Compras.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220620203308_Users")]
-    partial class Users
+    [Migration("20220716012135_todo")]
+    partial class todo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -58,7 +58,7 @@ namespace Compras.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("StateID")
+                    b.Property<int?>("StateID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -66,7 +66,8 @@ namespace Compras.Migrations
                     b.HasIndex("StateID");
 
                     b.HasIndex("Name", "StateID")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[StateID] IS NOT NULL");
 
                     b.ToTable("Cities");
                 });
@@ -92,6 +93,83 @@ namespace Compras.Migrations
                     b.ToTable("countries");
                 });
 
+            modelBuilder.Entity("Compras.Datos.Entities.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<float>("Stock")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Compras.Datos.Entities.ProductCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("CategoryID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryID");
+
+                    b.HasIndex("ProductId", "CategoryID")
+                        .IsUnique()
+                        .HasFilter("[ProductId] IS NOT NULL AND [CategoryID] IS NOT NULL");
+
+                    b.ToTable("ProductCategories");
+                });
+
+            modelBuilder.Entity("Compras.Datos.Entities.ProductImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
+                });
+
             modelBuilder.Entity("Compras.Datos.Entities.State", b =>
                 {
                     b.Property<int>("ID")
@@ -100,7 +178,7 @@ namespace Compras.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
-                    b.Property<int>("CountryID")
+                    b.Property<int?>("CountryID")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -113,7 +191,8 @@ namespace Compras.Migrations
                     b.HasIndex("CountryID");
 
                     b.HasIndex("Name", "CountryID")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[CountryID] IS NOT NULL");
 
                     b.ToTable("States");
                 });
@@ -131,7 +210,7 @@ namespace Compras.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("CityID")
+                    b.Property<int?>("CityID")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -351,20 +430,40 @@ namespace Compras.Migrations
                 {
                     b.HasOne("Compras.Datos.Entities.State", "State")
                         .WithMany("Cities")
-                        .HasForeignKey("StateID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StateID");
 
                     b.Navigation("State");
+                });
+
+            modelBuilder.Entity("Compras.Datos.Entities.ProductCategory", b =>
+                {
+                    b.HasOne("Compras.Datos.Entities.Category", "Category")
+                        .WithMany("ProductCategories")
+                        .HasForeignKey("CategoryID");
+
+                    b.HasOne("Compras.Datos.Entities.Product", "Product")
+                        .WithMany("ProductCategories")
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Compras.Datos.Entities.ProductImage", b =>
+                {
+                    b.HasOne("Compras.Datos.Entities.Product", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Compras.Datos.Entities.State", b =>
                 {
                     b.HasOne("Compras.Datos.Entities.Country", "Country")
                         .WithMany("States")
-                        .HasForeignKey("CountryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CountryID");
 
                     b.Navigation("Country");
                 });
@@ -373,9 +472,7 @@ namespace Compras.Migrations
                 {
                     b.HasOne("Compras.Datos.Entities.City", "City")
                         .WithMany("Users")
-                        .HasForeignKey("CityID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CityID");
 
                     b.Navigation("City");
                 });
@@ -431,6 +528,11 @@ namespace Compras.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Compras.Datos.Entities.Category", b =>
+                {
+                    b.Navigation("ProductCategories");
+                });
+
             modelBuilder.Entity("Compras.Datos.Entities.City", b =>
                 {
                     b.Navigation("Users");
@@ -439,6 +541,13 @@ namespace Compras.Migrations
             modelBuilder.Entity("Compras.Datos.Entities.Country", b =>
                 {
                     b.Navigation("States");
+                });
+
+            modelBuilder.Entity("Compras.Datos.Entities.Product", b =>
+                {
+                    b.Navigation("ProductCategories");
+
+                    b.Navigation("ProductImages");
                 });
 
             modelBuilder.Entity("Compras.Datos.Entities.State", b =>
