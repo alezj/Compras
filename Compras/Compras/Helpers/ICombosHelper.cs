@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Compras.Datos.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Compras.Helpers
 {
     public interface ICombosHelper
     {
         Task<IEnumerable<SelectListItem>> GetComboCategoriesAsync();
+
+        Task<IEnumerable<SelectListItem>> GetComboCategoriesAsync(IEnumerable<Category> filter);
 
         Task<IEnumerable<SelectListItem>> GetComboCountriesAsync();
 
