@@ -10,7 +10,7 @@ namespace Compras.Datos
         {
 
         }
-
+        public DbSet<TemporalSale> TemporalSales { get; set; }
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<City> Cities { get; set; }
