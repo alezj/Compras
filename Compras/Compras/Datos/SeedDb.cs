@@ -29,7 +29,7 @@ public class SeedDb
         await CheckRolesAsync();
         await CheckUserAsync("1010", "Yoho", "Jalez", "Yoho@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "perfil1.jpg", UserType.Admin);
         await CheckUserAsync("2020", "Jalez", "pro", "Jalez@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "perfil1.jpg", UserType.User);
-        await CheckUserAsync("3030", "Pere", "Sila", "pere@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "precila.jfif", UserType.User);
+        //await CheckUserAsync("3030", "Pere", "Sila", "pere@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "precila.jfif", UserType.User);
         await CheckUserAsync("4040", "Goku", "Cacaroto", "ElGoku@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Goku-Face-Image1.png", UserType.User);
         await CheckUserAsync("5050", "Gojan", "Pro", "ElGojan@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Gojan.jpg", UserType.User);
         await CheckProductsAsync();
@@ -45,9 +45,9 @@ public class SeedDb
             await AddProductAsync("AirPods", 1300000M, 12F, new List<string>() { "Tecnología", "Apple" }, new List<string>() { "airpos.png"});
             await AddProductAsync("Audifonos Bose", 870000M, 12F, new List<string>() { "Tecnología" }, new List<string>() { "audifonos_bose.png" });
             await AddProductAsync("Bicicleta Ribble", 12000000M, 6F, new List<string>() { "Deportes" }, new List<string>() { "bicicleta_ribble.png" });
-            //await AddProductAsync("Camisa Cuadros", 56000M, 24F, new List<string>() { "Ropa" }, new List<string>() { "camisa_cuadros.png" });
-            //await AddProductAsync("Casco Bicicleta", 820000M, 12F, new List<string>() { "Deportes" }, new List<string>() { "casco_bicicleta.png", "casco.png" });
-            //await AddProductAsync("iPad", 2300000M, 6F, new List<string>() { "Tecnología", "Apple" }, new List<string>() { "ipad.png" });
+            await AddProductAsync("Camisa Cuadros", 56000M, 24F, new List<string>() { "Ropa" }, new List<string>() { "camisa_cuadros.png" });
+            await AddProductAsync("Casco Bicicleta", 820000M, 12F, new List<string>() { "Deportes" }, new List<string>() { "casco_bicicleta.png", "casco.png" });
+            await AddProductAsync("iPad", 2300000M, 6F, new List<string>() { "Tecnología", "Apple" }, new List<string>() { "ipad.png" });
             await AddProductAsync("iPhone ", 5200000M, 6F, new List<string>() { "Tecnología", "Apple" }, new List<string>() { "Iphone1.jpg", "iphone2.png"});
             //await AddProductAsync("Mac Book Pro", 12100000M, 6F, new List<string>() { "Tecnología", "Apple" }, new List<string>() { "mac_book_pro.png" });
             //await AddProductAsync("Mancuernas", 370000M, 12F, new List<string>() { "Deportes" }, new List<string>() { "mancuernas.png" });
