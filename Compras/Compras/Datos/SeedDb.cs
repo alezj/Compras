@@ -36,6 +36,26 @@ public class SeedDb
 
     }
 
+
+    private async Task CheckCategoriesAsync()
+    {
+        if (!_context.Categories.Any())
+        {
+            _context.Categories.Add(new Category { Name = "Tecnología" });
+            _context.Categories.Add(new Category { Name = "Ropa" });
+            _context.Categories.Add(new Category { Name = "Calzado" });
+            _context.Categories.Add(new Category { Name = "Belleza" });
+            _context.Categories.Add(new Category { Name = "Nutricion" });
+            _context.Categories.Add(new Category { Name = "Deportes" });
+            _context.Categories.Add(new Category { Name = "Apple" });
+            _context.Categories.Add(new Category { Name = "mascotas" });
+            _context.Categories.Add(new Category { Name = "Gamer" });
+
+            await _context.SaveChangesAsync();
+        }
+    }
+
+
     private async  Task CheckProductsAsync()
     {
         if (!_context.Products.Any())
@@ -276,24 +296,5 @@ public class SeedDb
         await _context.SaveChangesAsync();
     }
 
-
-
-    private async Task CheckCategoriesAsync()
-    {
-        if (!_context.Categories.Any())
-        {
-            _context.Categories.Add(new Category { Name = "Tecnologia" });
-            _context.Categories.Add(new Category { Name = "Ropa" });
-            _context.Categories.Add(new Category { Name = "Calsado" });
-            _context.Categories.Add(new Category { Name = "Belleza" });
-            _context.Categories.Add(new Category { Name = "Nutricion" });
-            _context.Categories.Add(new Category { Name = "Deportes" });
-            _context.Categories.Add(new Category { Name = "Apple" });
-            _context.Categories.Add(new Category { Name = "mascotas" });
-            _context.Categories.Add(new Category { Name = "Gamer" });
-
-            await _context.SaveChangesAsync();
-        }
-    }
 
 }

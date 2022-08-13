@@ -20,7 +20,6 @@ namespace Compras.Controllers
             _context = context;
             _userHelper = userHelper;
         }
-
        
 
         public async Task<IActionResult> Index()
@@ -121,7 +120,7 @@ namespace Compras.Controllers
             string categories = string.Empty;
 
 
-            foreach (ProductCategory? category in product.ProductCategories)
+            foreach (ProductCategory category in product.ProductCategories)
 
             {
 
