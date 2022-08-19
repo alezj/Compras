@@ -1,8 +1,10 @@
 ﻿using Compras.Datos;
 using Compras.Datos.Entities;
+using Compras.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Vereyon.Web;
 
 namespace Compras.Controllers
 {
@@ -10,10 +12,12 @@ namespace Compras.Controllers
     public class OrdersController : Controller
     {
         private readonly DataContext _context;
+        private readonly IFlashMessage _flashMessage;
 
-        public OrdersController(DataContext context)
+        public OrdersController(DataContext context, IFlashMessage flashMessage)
         {
             _context = context;
+            _flashMessage = flashMessage;
         }
         public async Task<IActionResult> Index()
         {
@@ -43,6 +47,33 @@ namespace Compras.Controllers
             }
 
             return View(sale);
+        }
+        public async Task<IActionResult> Dispatch(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Sale sale = await _context.Sales.FindAsync(id);
+            if (sale == null)
+            {
+                return NotFound();
+            }
+
+            if (sale.OrderStatus != OrderStatus.Nuevo)
+            {
+                _flashMessage.Danger("Solo se pueden despachar pedidos que estén en estado 'nuevo'.");
+            }
+            else
+            {
+                sale.OrderStatus = OrderStatus.Despachado;
+                _context.Sales.Update(sale);
+                await _context.SaveChangesAsync();
+                _flashMessage.Confirmation("El estado del pedido ha sido cambiado a 'despachado'.");
+            }
+
+            return RedirectToAction(nameof(Details), new { Id = sale.Id });
         }
 
     }
