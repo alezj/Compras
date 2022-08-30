@@ -6,12 +6,13 @@ namespace Compras.Helpers
     public class BlobHelper : IBlobHelper
     {
         private readonly CloudBlobClient _blobClient;
+        IConfiguration _Configuration;
         public BlobHelper(IConfiguration configuration)
         {
             string keys = configuration["Blob:ConnectionString"];
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(keys);
             _blobClient = storageAccount.CreateCloudBlobClient();
-
+            _Configuration = configuration;
         }
         public async Task DeleteBlobAsync(Guid id, string containerName)
         {
@@ -52,11 +53,30 @@ namespace Compras.Helpers
         private async Task<Guid> UploadBlobAsync(Stream stream, string containerName)
         {
             Guid name = Guid.NewGuid();
-            CloudBlobContainer container = _blobClient.GetContainerReference(containerName);
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference($"{name}");
-            await blockBlob.UploadFromStreamAsync(stream);
+
+            string Path = _Configuration["ImagesPath"] + "\\" + containerName;
+            if (File.Exists(Path))
+            {
+                File.Delete(Path);
+            }
+
+            using (FileStream fileStream = System.IO.File.Create(Path))
+            {
+                fileStream.Write(ReadFully(stream));
+                fileStream.Close();
+            }
+
             return name;
 
+        }
+
+        public static byte[] ReadFully(Stream input)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                input.CopyTo(ms);
+                return ms.ToArray();
+            }
         }
     }
 }

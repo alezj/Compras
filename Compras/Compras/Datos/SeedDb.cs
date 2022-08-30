@@ -107,7 +107,7 @@ public class SeedDb
 
         foreach (string? image in images)
         {
-            Guid imageId = await _blobHelper.UploadBlobAsync($"{Environment.CurrentDirectory}\\wwwroot\\images\\products\\{image}", "products");
+            Guid imageId = await _blobHelper.UploadBlobAsync($"{Environment.CurrentDirectory}\\wwwroot\\images\\products\\{image}", image);
             prodcut.ProductImages.Add(new ProductImage { ImageId = imageId });
         }
 
@@ -128,7 +128,7 @@ public class SeedDb
         User user = await _userHelper.GetUserAsync(email);
         if (user == null)
         {
-            Guid imageId = await _blobHelper.UploadBlobAsync($"{Environment.CurrentDirectory}\\wwwroot\\images\\users\\{image}", "users");
+            Guid imageId = await _blobHelper.UploadBlobAsync($"{Environment.CurrentDirectory}\\wwwroot\\images\\users\\{image}", image);
 
 
             user = new User
