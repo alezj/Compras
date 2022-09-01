@@ -15,7 +15,8 @@ namespace Compras.Datos.Entities
         [Display(Name = "Foto")]
         public string ImageFullPath => ImageId == Guid.Empty
             ? $"https://localhost:7228/images/noImageProduct.jpg"
-            : $"http://localhost/Products/{ImageId}";
+            :$"http://localhost/Imagenes/adidas_barracuda.jpg";
+            //: $"http://localhost/Products/{ImageId}";
     }
 
 }
