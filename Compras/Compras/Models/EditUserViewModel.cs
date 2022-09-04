@@ -35,11 +35,13 @@ namespace Compras.Models
         [Display(Name = "Foto")]
         public Guid ImageId { get; set; }
 
-      
         [Display(Name = "Foto")]
-        public string ImageFullPath => ImageId == Guid.Empty
+        public string ImageName { get; set; }
+
+        [Display(Name = "Foto")]
+        public string ImageFullPath => ImageName == string.Empty
             ? $"https://localhost:7057/images/noimage.png"
-            : $"https://shoppingzulu.blob.core.windows.net/users/{ImageId}";
+            : $"http://localhost/Imagenes/users/{ImageName}";
 
         [Display(Name = "Image")]
         public IFormFile? ImageFile { get; set; }

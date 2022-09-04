@@ -220,6 +220,7 @@ namespace Compras.Controllers
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
                 ImageId = user.ImageId,
+                ImageName = user.ImageName,
                 Cities = await _combosHelper.GetComboCitiesAsync(user.City.State.ID),
                 CityId = user.City.ID,
                 Countries = await _combosHelper.GetComboCountriesAsync(),
@@ -253,6 +254,7 @@ namespace Compras.Controllers
                 user.Address = model.Address;
                 user.PhoneNumber = model.PhoneNumber;
                 user.ImageId = imageId;
+                user.ImageName = model.ImageFile.FileName;
                 user.City = await _context.Cities.FindAsync(model.CityId);
                 user.Document = model.Document;
 
