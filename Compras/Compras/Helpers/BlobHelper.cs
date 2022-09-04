@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAzure.Storage;
+﻿using Compras.Migrations;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Compras.Helpers
@@ -14,7 +15,7 @@ namespace Compras.Helpers
             _blobClient = storageAccount.CreateCloudBlobClient();
             _Configuration = configuration;
         }
-        public async Task DeleteBlobAsync(Guid id, string containerName)
+        public async Task DeleteBlobAsync(Guid id, string containerName, string imagename)
         {
             try
             {
@@ -28,33 +29,33 @@ namespace Compras.Helpers
             }
         }
 
-        public async Task<Guid> UploadBlobAsync(IFormFile file, string containerName)
+        public async Task<Guid> UploadBlobAsync(IFormFile file, string containerName, string imagename)
         {
             Stream stream = file.OpenReadStream();
-            return await UploadBlobAsync(stream, containerName);
+            return await UploadBlobAsync(stream, containerName, imagename);
 
         }
 
       
 
-        public async Task<Guid> UploadBlobAsync(byte[] file, string containerName)
+        public async Task<Guid> UploadBlobAsync(byte[] file, string containerName, string imagename)
         {
             MemoryStream stream = new MemoryStream(file);
-            return await UploadBlobAsync(stream, containerName);
+            return await UploadBlobAsync(stream, containerName,  imagename);
 
         }
 
-        public async Task<Guid> UploadBlobAsync(string image, string containerName)
+        public async Task<Guid> UploadBlobAsync(string imagefile, string containerName, string imagename)
         {
-            Stream stream = File.OpenRead(image);
-            return await UploadBlobAsync(stream, containerName);
+            Stream stream = File.OpenRead(imagefile);
+            return await UploadBlobAsync(stream, containerName, imagename);
 
         }
-        private async Task<Guid> UploadBlobAsync(Stream stream, string containerName)
+        private async Task<Guid> UploadBlobAsync(Stream stream, string containerName, string imagename)
         {
             Guid name = Guid.NewGuid();
 
-            string Path = _Configuration["ImagesPath"] + "\\" + containerName;
+            string Path = _Configuration["ImagesPath"] + "\\" + containerName + "\\" + imagename;
             if (File.Exists(Path))
             {
                 File.Delete(Path);

@@ -109,7 +109,7 @@ namespace Compras.Controllers
 
                 if (model.ImageFile != null)
                 {
-                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users", model.ImageFile.FileName);
                 }
 
                 model.ImageId = imageId;
@@ -243,7 +243,7 @@ namespace Compras.Controllers
 
                 if (model.ImageFile != null)
                 {
-                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users", model.ImageFile.FileName);
                 }
 
                 User user = await _userHelper.GetUserAsync(User.Identity.Name);

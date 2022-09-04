@@ -49,8 +49,9 @@ namespace Compras.Controllers
                 Guid imageId = Guid.Empty;
                 if (model.ImageFile != null)
                 {
-                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products",model.ImageFile.FileName);
                 }
+                string imageName = model.ImageFile.FileName;
 
                 Product product = new()
                 {
@@ -72,7 +73,7 @@ namespace Compras.Controllers
                 {
                     product.ProductImages = new List<ProductImage>()
             {
-                new ProductImage { ImageId = imageId }
+                new ProductImage { ImageId = imageId, ImageName= imageName }
             };
                 }
 
@@ -213,7 +214,7 @@ namespace Compras.Controllers
         {
             if (ModelState.IsValid)
             {
-                Guid imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
+                Guid imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products", model.ImageFile.FileName);
                 Product product = await _context.Products.FindAsync(model.ProductId);
                 ProductImage productImage = new()
                 {
@@ -250,7 +251,7 @@ namespace Compras.Controllers
                 return NotFound();
             }
 
-            await _blobHelper.DeleteBlobAsync(productImage.ImageId, "products");
+            await _blobHelper.DeleteBlobAsync(productImage.ImageId, "products", productImage.ImageName);
             _context.ProductImages.Remove(productImage);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), new { Id = productImage.Product.Id });
@@ -381,7 +382,7 @@ namespace Compras.Controllers
 
             foreach (ProductImage productImage in product.ProductImages)
             {
-                await _blobHelper.DeleteBlobAsync(productImage.ImageId, "products");
+                await _blobHelper.DeleteBlobAsync(productImage.ImageId, "products", productImage.ImageName);
             }
 
             return RedirectToAction(nameof(Index));

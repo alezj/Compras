@@ -32,11 +32,13 @@ namespace Compras.Datos.Entities
         [Display(Name = "Foto")]
         public Guid ImageId { get; set; }
 
-        
+        [Display(Name = "Foto Descripcion")]
+        public string ImageName { get; set; }
+
         [Display(Name = "Foto")]
-        public string ImageFullPath => ImageId == Guid.Empty
+        public string ImageFullPath => ImageName == string.Empty
             ? $"https://localhost:7228/images/noimage.png"
-            : $"https://shoppingzulu.blob.core.windows.net/users/{ImageId}";
+            : $"http://localhost/Imagenes/users/{ImageName}";
 
         [Display(Name = "Tipo de usuario")]
         public UserType UserType { get; set; }

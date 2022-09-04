@@ -57,13 +57,15 @@ namespace Compras.Controllers
             if (ModelState.IsValid)
             {
                 Guid imageId = Guid.Empty;
+                //string imageName = string.Empty;
 
                 if (model.ImageFile != null)
                 {
-                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users",model.ImageFile.FileName);
                 }
 
                 model.ImageId = imageId;
+                //imageName = model.ImageFile.FileName;
                 User user = await _userHelper.AddUserAsync(model);
                 if (user == null)
                 {

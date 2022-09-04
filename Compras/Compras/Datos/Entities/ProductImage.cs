@@ -11,12 +11,15 @@ namespace Compras.Datos.Entities
         [Display(Name = "Foto")]
         public Guid ImageId { get; set; }
 
+        [Display(Name = "Nombre Foto")]
+        public String ImageName { get; set; }
+
         //TODO: Pending to change to the correct path
         [Display(Name = "Foto")]
-        public string ImageFullPath => ImageId == Guid.Empty
+        public string ImageFullPath => ImageName == String.Empty 
             ? $"https://localhost:7228/images/noImageProduct.jpg"
-            :$"http://localhost/Imagenes/adidas_barracuda.jpg";
-            //: $"http://localhost/Products/{ImageId}";
+            //:$"http://localhost/Imagenes/adidas_barracuda.jpg";
+          : $"http://localhost/Imagenes/products/{ImageName}";
     }
 
 }

@@ -78,6 +78,7 @@ namespace Compras.Helpers
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 ImageId = model.ImageId,
+                ImageName = model.ImageFile.FileName,
                 PhoneNumber = model.PhoneNumber,
                 City = await _context.Cities.FindAsync(model.CityId),
                 UserName = model.Username,
