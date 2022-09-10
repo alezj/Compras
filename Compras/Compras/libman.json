@@ -11,12 +11,12 @@
       "destination": "wwwroot/lib/datatables/"
     },
     {
-      "library": "jqueryui@1.13.2",
-      "destination": "wwwroot/lib/jqueryui/"
-    },
-    {
       "library": "jasny-bootstrap@4.0.0",
       "destination": "wwwroot/lib/jasny-bootstrap/"
+    },
+    {
+      "library": "jqueryui@1.13.2",
+      "destination": "wwwroot/lib/jqueryui/"
     }
   ]
 }
