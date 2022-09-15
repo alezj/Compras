@@ -95,44 +95,7 @@ namespace Compras.Controllers
         }
 
         // GET: Countries/Create
-        public IActionResult Create()
-        {
-            Country country = new() { States = new List<State>() };
-            return View();
-        }
-
-        // POS: Countries/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Country country)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Add(country);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateException dbUpdateException)
-                {
-                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
-                    {
-                        ModelState.AddModelError(string.Empty, "Ya existe un país con el mismo nombre.");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
-                    }
-                }
-                catch (Exception exception)
-                {
-                    ModelState.AddModelError(string.Empty, exception.Message);
-                }
-            }
-            return View(country);
-
-        }
+       
 
         public async Task<IActionResult> AddState(int? id)
         {
@@ -257,60 +220,7 @@ namespace Compras.Controllers
 
         }
         // GET: Countries/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Country country = await _context.countries
-                .Include(c=> c.States)
-                .FirstOrDefaultAsync(c => c.ID == id);
-            if (country == null)
-            {
-                return NotFound();
-            }
-            return View(country);
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Country country)
-        {
-            if (id != country.ID)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(country);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateException dbUpdateException)
-                {
-                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
-                    {
-                        ModelState.AddModelError(string.Empty, "Ya existe un país con el mismo nombre.");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
-                    }
-                }
-                catch (Exception exception)
-                {
-                    ModelState.AddModelError(string.Empty, exception.Message);
-                }
-
-            }
-            return View(country);
-        }
+      
         public async Task<IActionResult> EditState(int? id)
         {
             if (id == null)
