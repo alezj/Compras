@@ -28,23 +28,7 @@ namespace Compras.Controllers
         }
 
        
-        [HttpGet]
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return View(category);
-        }
+        
         [NoDirectAccess]
         public async Task<IActionResult> Delete(int? id)
         {
