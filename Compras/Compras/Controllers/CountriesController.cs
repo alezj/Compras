@@ -452,12 +452,9 @@ namespace Compras.Controllers
 
 
         // GET: Countries/Delete/5
+        [NoDirectAccess]
         public async Task<IActionResult> DeleteState(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
             State state = await _context.States
                 .Include(s => s.Country)
@@ -467,37 +464,18 @@ namespace Compras.Controllers
                 return NotFound();
             }
 
-            return View(state);
-        }
-
-        // POST: Countries/Delete/5
-        [HttpPost, ActionName("DeleteState")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteStateConfirmed(int id)
-        {
-            State state = await _context.States
-            .Include(s => s.Country)
-            .FirstOrDefaultAsync(s => s.ID == id); 
-            _context.States.Remove(state);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Details ),new {id =state.Country.ID});
-        }
-        public async Task<IActionResult> DeleteCity(int? id)
-        {
-            if (id == null)
+            try
             {
-                return NotFound();
+                _context.States.Remove(state);
+                await _context.SaveChangesAsync();
+                _flashMessage.Info("Registro borrado.");
+            }
+            catch
+            {
+                _flashMessage.Danger("No se puede borrar el estado  porque tiene registros relacionados.");
             }
 
-            City city = await _context.Cities
-                .Include(c => c.State)
-                .FirstOrDefaultAsync(c => c.ID == id);
-            if (city == null)
-            {
-                return NotFound();
-            }
-
-            return View(city);
+            return RedirectToAction(nameof(Details), new { Id = state.Country.ID });
         }
 
         // POST: Countries/Delete/5
