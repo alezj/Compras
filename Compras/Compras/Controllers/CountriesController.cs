@@ -95,14 +95,11 @@ namespace Compras.Controllers
         }
 
         // GET: Countries/Create
-       
 
-        public async Task<IActionResult> AddState(int? id)
+        [NoDirectAccess]
+        public async Task<IActionResult> AddState(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+           
 
             Country country = await _context.countries.FindAsync(id);
 
@@ -136,7 +133,13 @@ namespace Compras.Controllers
                     };
                     _context.Add(state);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Details), new { Id = model.CountryID });
+                    Country country = await _context.countries
+                .Include(c => c.States)
+                .ThenInclude(s => s.Cities)
+                .FirstOrDefaultAsync(c => c.ID == model.CountryID);
+                    _flashMessage.Info("Registro creado.");
+                    return Json(new { isValid = true, html = ModalHelper.RenderRazorViewToString(this, "_ViewAllStates", country) });
+
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
@@ -154,7 +157,7 @@ namespace Compras.Controllers
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
-            return View(model);
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddState", model) });
 
         }
 
