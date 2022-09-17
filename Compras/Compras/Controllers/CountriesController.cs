@@ -223,13 +223,10 @@ namespace Compras.Controllers
 
         }
         // GET: Countries/Edit/5
-      
+        [NoDirectAccess]
         public async Task<IActionResult> EditState(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+           
 
             State state = await _context.States
                 .Include(s => s.Country)
@@ -267,8 +264,14 @@ namespace Compras.Controllers
                         Name = model.Name,
                     };
                     _context.Update(state);
+                    Country country = await _context.countries
+                 .Include(c => c.States)
+                 .ThenInclude(s => s.Cities)
+                 .FirstOrDefaultAsync(c => c.ID == model.CountryID);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Details), new { Id = model.CountryID });
+                    _flashMessage.Confirmation("Registro Actualizado");
+                    return Json(new { isValid = true, html = ModalHelper.RenderRazorViewToString(this, "_ViewAllStates", country) });
+
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
@@ -287,7 +290,7 @@ namespace Compras.Controllers
                 }
 
             }
-            return View(model);
+             return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "EditState", model) });
         }
         public async Task<IActionResult> EditCity(int? id)
         {
