@@ -144,12 +144,10 @@ namespace Compras.Controllers
         }
 
         //==============================================AddCity
-        public async Task<IActionResult> AddCity(int? id)
+        [NoDirectAccess]
+        public async Task<IActionResult> AddCity(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            
 
             State state = await _context.States.FindAsync(id);
 
@@ -183,7 +181,13 @@ namespace Compras.Controllers
                     };
                     _context.Add(city);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(DetailsState), new { Id = model.StateID });
+                    State state = await _context.States
+                .Include(s => s.Cities)
+                .FirstOrDefaultAsync(c => c.ID == model.StateID);
+                _flashMessage.Confirmation("Registro Creeado");
+                return Json(new { isValid = true, html = ModalHelper.RenderRazorViewToString(this, "_ViewAllCities", state) });
+                       
+
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
@@ -201,7 +205,7 @@ namespace Compras.Controllers
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
-            return View(model);
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddCity", model) });
 
         }
         // GET: Countries/Edit/5
@@ -274,12 +278,10 @@ namespace Compras.Controllers
             }
              return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "EditState", model) });
         }
-        public async Task<IActionResult> EditCity(int? id)
+        [NoDirectAccess]
+        public async Task<IActionResult> EditCity(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+           
 
             City city = await _context.Cities
                 .Include(c => c.State)
@@ -300,6 +302,7 @@ namespace Compras.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+   
         public async Task<IActionResult> EditCity(int id, CityViewModel model)
         {
             if (id != model.ID)
@@ -319,7 +322,12 @@ namespace Compras.Controllers
                     };
                     _context.Update(city);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(DetailsState), new { Id = model.StateID });
+                    State state = await _context.States
+               .Include(s => s.Cities)
+               .FirstOrDefaultAsync(c => c.ID == model.StateID);
+                _flashMessage.Confirmation("Registro actualizado.");
+                return Json(new { isValid = true, html = ModalHelper.RenderRazorViewToString(this, "_ViewAllCities", state) });
+
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
@@ -338,7 +346,7 @@ namespace Compras.Controllers
                 }
 
             }
-            return View(model);
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "EditCity", model) });
         }
 
         // GET: Countries/Delete/5
@@ -466,16 +474,29 @@ namespace Compras.Controllers
             return RedirectToAction(nameof(Details), new { Id = state.Country.ID });
         }
 
-        // POST: Countries/Delete/5
-        [HttpPost, ActionName("DeleteCity")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteCityConfirmed(int id)
+        [NoDirectAccess]
+        public async Task<IActionResult> DeleteCity(int id)
         {
+
             City city = await _context.Cities
-            .Include(c => c.State)
-            .FirstOrDefaultAsync(c => c.ID == id);
-            _context.Cities.Remove(city);
-            await _context.SaveChangesAsync();
+                .Include(c => c.State)
+                .FirstOrDefaultAsync(c => c.ID == id);
+            if (city == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _context.Cities.Remove(city);
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                _flashMessage.Danger("No se puede borrar la ciudad porque tiene registros relacionados.");
+            }
+
+            _flashMessage.Info("Registro borrado.");
             return RedirectToAction(nameof(DetailsState), new { id = city.State.ID });
         }
 
