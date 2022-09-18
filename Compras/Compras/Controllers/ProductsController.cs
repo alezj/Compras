@@ -5,6 +5,8 @@ using Compras.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Vereyon.Web;
+using static Compras.Helpers.ModalHelper;
 
 namespace Compras.Controllers
 {
@@ -14,12 +16,14 @@ namespace Compras.Controllers
         private readonly DataContext _context;
         private readonly ICombosHelper _combosHelper;
         private readonly IBlobHelper _blobHelper;
+        private readonly IFlashMessage _flashMessage;
 
-        public ProductsController(DataContext context, ICombosHelper combosHelper, IBlobHelper blobHelper)
+        public ProductsController(DataContext context, ICombosHelper combosHelper, IBlobHelper blobHelper, IFlashMessage  flashMessage)
         {
             _context = context;
             _combosHelper = combosHelper;
             _blobHelper = blobHelper;
+            _flashMessage = flashMessage;
         }
         public async Task<IActionResult> Index()
         {
@@ -30,6 +34,7 @@ namespace Compras.Controllers
                 .ToListAsync());
         }
 
+        [NoDirectAccess]
         public async Task<IActionResult> Create()
         {
             CreateProductViewModel model = new()
@@ -81,7 +86,16 @@ namespace Compras.Controllers
                 {
                     _context.Add(product);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    _flashMessage.Confirmation("Registro creado.");
+                    return Json(new
+                    {
+                        isValid = true,
+                        html = ModalHelper.RenderRazorViewToString(this, "_ViewAllProducts", _context.Products
+                        .Include(p => p.ProductImages)
+                        .Include(p => p.ProductCategories)
+                        .ThenInclude(pc => pc.Category).ToList())
+                    });
+
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
@@ -101,14 +115,13 @@ namespace Compras.Controllers
             }
 
             model.Categories = await _combosHelper.GetComboCategoriesAsync();
-            return View(model);
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "Create", model) });
         }
-        public async Task<IActionResult> Edit(int? id)
+
+        [NoDirectAccess]
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+          
 
             Product product = await _context.Products.FindAsync(id);
             if (product == null)
@@ -146,7 +159,16 @@ namespace Compras.Controllers
                 product.Stock = model.Stock;
                 _context.Update(product);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _flashMessage.Confirmation("Registro actualizado.");
+                return Json(new
+                {
+                    isValid = true,
+                    html = ModalHelper.RenderRazorViewToString(this, "_ViewAllProducts", _context.Products
+                    .Include(p => p.ProductImages)
+                    .Include(p => p.ProductCategories)
+                    .ThenInclude(pc => pc.Category).ToList())
+                });
+
             }
             catch (DbUpdateException dbUpdateException)
             {
@@ -163,8 +185,8 @@ namespace Compras.Controllers
             {
                 ModelState.AddModelError(string.Empty, exception.Message);
             }
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "Edit", model) });
 
-            return View(model);
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -349,13 +371,10 @@ namespace Compras.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), new { Id = productCategory.Product.Id });
         }
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
+        [NoDirectAccess]
+        public async Task<IActionResult> Delete(int id)
+        {
             Product product = await _context.Products
                 .Include(p => p.ProductCategories)
                 .Include(p => p.ProductImages)
@@ -365,28 +384,20 @@ namespace Compras.Controllers
                 return NotFound();
             }
 
-            return View(product);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Product model)
-        {
-            Product product = await _context.Products
-                .Include(p => p.ProductImages)
-                .Include(p => p.ProductCategories)
-                .FirstOrDefaultAsync(p => p.Id == model.Id);
-
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-
             foreach (ProductImage productImage in product.ProductImages)
             {
                 await _blobHelper.DeleteBlobAsync(productImage.ImageId, "products", productImage.ImageName);
             }
 
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            _flashMessage.Info("Registro borrado.");
             return RedirectToAction(nameof(Index));
         }
+
+
+        
+        
 
     }
 }
