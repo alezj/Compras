@@ -74,25 +74,7 @@ namespace Compras.Controllers
 
             return View(state);
         }
-        [HttpGet]
-        public async Task<IActionResult> DetailsCity(int? id)
-        {
-
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            City city = await _context.Cities
-                .Include(c => c.State)
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (city == null)
-            {
-                return NotFound();
-            }
-
-            return View(city);
-        }
+        
 
         // GET: Countries/Create
 
@@ -429,7 +411,7 @@ namespace Compras.Controllers
                         isValid = true,
                         html = ModalHelper.RenderRazorViewToString(
                             this,
-                            "_ViewAll",
+                            "_ViewAllCountries",
                             _context.countries
                                 .Include(c => c.States)
                                 .ThenInclude(s => s.Cities)
