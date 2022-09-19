@@ -17,16 +17,32 @@ namespace Compras.Helpers
         }
         public async Task DeleteBlobAsync(Guid id, string containerName, string imagename)
         {
-            try
+            //try
+            //{
+            //    CloudBlobContainer container = _blobClient.GetContainerReference(containerName);
+            //    CloudBlockBlob blockBlob = container.GetBlockBlobReference($"{id}");
+            //    await blockBlob.DeleteAsync();
+            //}
+            //catch   (Exception)
+            //{
+            //    throw;
+            //}
+
+            string Path = _Configuration["ImagesPath"] + "\\" + containerName + "\\" + imagename;
+            
+            //Stream stream = File.OpenRead(imagefile);
+            if (File.Exists(Path))
             {
-                CloudBlobContainer container = _blobClient.GetContainerReference(containerName);
-                CloudBlockBlob blockBlob = container.GetBlockBlobReference($"{id}");
-                await blockBlob.DeleteAsync();
+                File.Delete(Path);
             }
-            catch   (Exception)
-            {
-                throw;
-            }
+
+            //using (FileStream fileStream = System.IO.File.Create(Path))
+            //{
+            //    fileStream.Write(ReadFully(stream));
+            //    fileStream.Close();
+            //}
+
+            //return name;
         }
 
         public async Task<Guid> UploadBlobAsync(IFormFile file, string containerName, string imagename)
