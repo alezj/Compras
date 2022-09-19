@@ -17,6 +17,12 @@ namespace Compras.Controllers
         private readonly IUserHelper _userHelper;
         private readonly IOrdersHelper _ordersHelper;
 
+
+        public IActionResult Navar()
+        {
+            return View();
+        }
+
         public HomeController(ILogger<HomeController> logger, DataContext context, IUserHelper userHelper, IOrdersHelper ordersHelper)
         {
             _logger = logger;
