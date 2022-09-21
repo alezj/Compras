@@ -76,7 +76,7 @@ namespace Compras.Controllers
         public async Task<IActionResult> Logout()
         {
             await _userHelper.LogoutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         public IActionResult NotAuthorized()

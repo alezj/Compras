@@ -2,8 +2,26 @@
 
 @{
     ViewData["Title"] = "Login";
+ 
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Compras</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/datatables/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/lib/jqueryui/jquery-ui.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Compras.styles.css" asp-append-version="true" />
+
+</head>
+<body class="hold-transition sidebar-mini">
+
 <flash dismissable="true" />
+
 
 <div class="row">
    
@@ -51,3 +69,25 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/jasny/jasny-bootstrap.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+        <script src="~/lib/font-awesome/js/all.min.js"></script>
+        <script>
+            function displayBusyIndicator() {
+                $('.loading').show();
+            }
+        </script>
+
+        <script>
+            $(window).on('beforeunload', function () {
+                displayBusyIndicator();
+            });
+        </script>
+
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
+    </html>
