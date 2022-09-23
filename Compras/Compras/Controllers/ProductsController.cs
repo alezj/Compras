@@ -276,6 +276,7 @@ namespace Compras.Controllers
             await _blobHelper.DeleteBlobAsync(productImage.ImageId, "products", productImage.ImageName);
             _context.ProductImages.Remove(productImage);
             await _context.SaveChangesAsync();
+            _flashMessage.Info("Registro borrado.");
             return RedirectToAction(nameof(Details), new { Id = productImage.Product.Id });
         }
         public async Task<IActionResult> AddCategory(int? id)
@@ -369,6 +370,7 @@ namespace Compras.Controllers
 
             _context.ProductCategories.Remove(productCategory);
             await _context.SaveChangesAsync();
+            _flashMessage.Info("Registro borrado.");
             return RedirectToAction(nameof(Details), new { Id = productCategory.Product.Id });
         }
 
