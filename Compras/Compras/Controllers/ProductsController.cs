@@ -56,7 +56,7 @@ namespace Compras.Controllers
                 {
                     imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products",model.ImageFile.FileName);
                 }
-                string imageName = model.ImageFile.FileName;
+                
 
                 Product product = new()
                 {
@@ -76,9 +76,11 @@ namespace Compras.Controllers
 
                 if (imageId != Guid.Empty)
                 {
+                    string imageName = model.ImageFile.FileName;
                     product.ProductImages = new List<ProductImage>()
             {
-                new ProductImage { ImageId = imageId, ImageName= imageName }
+                       
+                    new ProductImage { ImageId = imageId, ImageName= imageName }
             };
                 }
 
@@ -234,11 +236,13 @@ namespace Compras.Controllers
             if (ModelState.IsValid)
             {
                 Guid imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products", model.ImageFile.FileName);
+                string image = model.ImageFile.FileName;
                 Product product = await _context.Products.FindAsync(model.ProductId);
                 ProductImage productImage = new()
                 {
                     Product = product,
                     ImageId = imageId,
+                    ImageName = image,
                 };
 
                 try
