@@ -6,81 +6,85 @@
 
 }
 
+<div class="row ">
 
-<div class="login-box">
-    <div class="login-logo">
-        <a href="../../index2.html"><b>COMPRAS </b>LTE</a>
-    </div>
-    <!-- /.login-logo -->
-    <div class="card">
-        <div class="card-body login-card-body">
-            <p class="login-box-msg">Iniciar Sesión</p>
-
-            <form asp-action="Login">
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-                <div class="input-group mb-3">
-                    <input asp-for="Username" type="email" class="form-control" placeholder="Email">
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-envelope"></span>
-                        </div>
-                    </div>
-                    <div class="text">
-                        <span asp-validation-for="Username" class="text-danger"></span>
-                    </div>
-
-                </div>
-                <div class="input-group mb-3">
-                    <input asp-for="Password" type="password" class="form-control" placeholder="Password">
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-lock"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="text">
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-
-                <div class="row">
-                    <div class="col-8">
-                        <div class="icheck-primary">
-                            <input asp-for="RememberMe" type="checkbox" id="remember">
-                            <label asp-for="RememberMe"> Recuerdame </label>
-                        </div>
-                      <span asp-validation-for="RememberMe" class="text-warning"></span>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-4">
-                        <button input type="submit" value="Login" class="btn btn-primary btn-block"><i class="fa-solid fa-user"></i> Entrar</button>
-                    </div>
-                    <!-- /.col -->
-                </div>
-            </form>
-
-            <div class="social-auth-links text-center mb-3">
-                <p>- O -</p>
-                <a href="#" class="btn btn-block btn-primary">
-                    <i class="fab fa-facebook mr-2"></i> Inicia con using Facebook
-                </a>
-                <a href="#" class="btn btn-block btn-danger">
-                    <i class="fab fa-google-plus mr-2"></i> Inicia con using Google+
-                </a>
+    <div class="col-md-4 offset-4">
+        <div class="login-box ">
+            <div class="login-logo">
+                <a href="../../index2.html"><b>COMPRAS </b>LTE</a>
             </div>
-            <!-- /.social-auth-links -->
+            <!-- /.login-logo -->
+            <div class="card">
+                <div class="card-body login-card-body">
+                    <p class="login-box-msg">Iniciar Sesión</p>
 
-            <p class="mb-1">
-                <a href="forgot-password.html">Olvidaste tu contraseña?</a>
-            </p>
-            <p class="mb-0">
-                <a asp-action="Register" class="text-center"><i class="fa-solid fa-circle-plus"></i> Registrate</a>
-            </p>
+                    <form asp-action="Login">
+                        <flash dismissable="true" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <div class="input-group mb-3">
+                            <input asp-for="Username" type="email" class="form-control" placeholder="Email">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-envelope"></span>
+                                </div>
+                            </div>
+                            <div class="text">
+                                <span asp-validation-for="Username" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="input-group mb-3">
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="icheck-primary">
+                                    <input asp-for="RememberMe" type="checkbox" id="remember">
+                                    <label asp-for="RememberMe"> Recuerdame </label>
+                                </div>
+                              <span asp-validation-for="RememberMe" class="text-warning"></span>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-4">
+                                <button input type="submit" value="Login" class="btn btn-primary btn-block"><i class="fa-solid fa-user"></i> Entrar</button>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                    </form>
+
+                    <div class="social-auth-links text-center mb-3">
+                        <p>- O -</p>
+                        <a href="#" class="btn btn-block btn-primary">
+                            <i class="fab fa-facebook mr-2"></i> Inicia con using Facebook
+                        </a>
+                        <a href="#" class="btn btn-block btn-danger">
+                            <i class="fab fa-google-plus mr-2"></i> Inicia con using Google+
+                        </a>
+                    </div>
+                    <!-- /.social-auth-links -->
+
+                    <p class="mb-1">
+                        <a href="forgot-password.html">Olvidaste tu contraseña?</a>
+                    </p>
+                    <p class="mb-0">
+                        <a asp-action="Register" class="text-center"><i class="fa-solid fa-circle-plus"></i> Registrate</a>
+                    </p>
+                </div>
+                <!-- /.login-card-body -->
+            </div>
         </div>
-        <!-- /.login-card-body -->
     </div>
 </div>
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
