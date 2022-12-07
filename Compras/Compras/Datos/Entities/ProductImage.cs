@@ -17,7 +17,7 @@ namespace Compras.Datos.Entities
         //TODO: Pending to change to the correct path
         [Display(Name = "Foto")]
         public string ImageFullPath => ImageName == String.Empty 
-            ? $"https://localhost:7228/images/noImageProduct.jpg"
+            ? $"http://localhost/images/noImageProduct.jpg"
             //:$"http://localhost/Imagenes/adidas_barracuda.jpg";
           : $"http://localhost/Imagenes/products/{ImageName}";
     }

@@ -50,21 +50,21 @@ builder.Services.AddScoped<IOrdersHelper, OrdersHelper>();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
-SeedData();
+//SeedData();
 
-void SeedData()
-{
-    IServiceScopeFactory? scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+//void SeedData()
+//{
+//    IServiceScopeFactory? scopedFactory = app.Services.GetService<IServiceScopeFactory>();
 
-    using (IServiceScope? scope = scopedFactory.CreateScope())
-    {
-        SeedDb? service = scope.ServiceProvider.GetService<SeedDb>();
-        service.SeedAsync().Wait();
-    }
+//    using (IServiceScope? scope = scopedFactory.CreateScope())
+//    {
+//        SeedDb? service = scope.ServiceProvider.GetService<SeedDb>();
+//        service.SeedAsync().Wait();
+//    }
 
 
 
-}
+//}
 
 if (!app.Environment.IsDevelopment())
 {
