@@ -12,9 +12,7 @@ namespace Compras.Datos
         }
         
         public DbSet<Category> Categories { get; set; }
-
         public DbSet<City> Cities { get; set; }
-
         public DbSet <Country> countries { get; set; }
         public object Countries { get; internal set; }
         public DbSet<Sale> Sales { get; set; }
